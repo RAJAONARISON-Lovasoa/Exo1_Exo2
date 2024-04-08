@@ -1,0 +1,98 @@
+ #Exo 2: Minimisation d'une fonction donné par la méthode de KARNAUGH
+
+#Posons F(A,B,C)=(A.B.C)+(A.(¬B).C)+(A.B.(¬C))
+
+ALGORITHME
+
+Fonction Karnaugh_Minimisation_F(A, B, C)
+   return (A and B and C) or (A and (¬B) and C) or (A and B and (¬C))
+    Variables:
+        tableau_karnaugh_A <- Tableau de Karnaugh pour le terme A.B.C
+        tableau_karnaugh_B <- Tableau de Karnaugh pour le terme A.(¬B).C
+        tableau_karnaugh_C <- Tableau de Karnaugh pour le terme A.B.(¬C)
+        groupes_minimaux_A <- Liste vide pour stocker les groupes minimaux de A.B.C
+        groupes_minimaux_B <- Liste vide pour stocker les groupes minimaux de A.(¬B).C
+        groupes_minimaux_C <- Liste vide pour stocker les groupes minimaux de A.B.(¬C)
+        expression_minimale <- Chaine de caractères pour stocker l'expression minimale
+
+#Construction des tableaux de Karnaugh
+    tableau_karnaugh_A <- Construction_Tableau_Karnaugh(Fonction_A.B.C)
+    tableau_karnaugh_B <- Construction_Tableau_Karnaugh(Fonction_A.(¬B).C)
+    tableau_karnaugh_C <- Construction_Tableau_Karnaugh(Fonction_A.B.(¬C))
+
+#Identification des groupes minimaux pour chaque terme
+    groupes_minimaux_A <- Minimisation_Karnaugh(tableau_karnaugh_A)
+    groupes_minimaux_B <- Minimisation_Karnaugh(tableau_karnaugh_B)
+    groupes_minimaux_C <- Minimisation_Karnaugh(tableau_karnaugh_C)
+
+#Combinaison des groupes minimaux pour obtenir l'expression minimale
+    Pour chaque groupe dans groupes_minimaux_A:
+        expression_minimale <- expression_minimale + 'A' * nombre_de_variables(groupe) + ' + '
+    Pour chaque groupe dans groupes_minimaux_B:
+        expression_minimale <- expression_minimale + '(¬B)' * nombre_de_variables(groupe) + ' + '
+    Pour chaque groupe dans groupes_minimaux_C:
+        expression_minimale <- expression_minimale + '(¬C)' * nombre_de_variables(groupe) + ' + '
+    Retourner expression_minimale
+
+PTHON
+
+def Minimisation_Karnaugh(F):
+    # Créer un tableau de Karnaugh pour la fonction F
+    karnaugh_table = [
+        [0, 1, 3, 2],
+        [4, 5, 7, 6],
+        [12, 13, 15, 14],
+        [8, 9, 11, 10]
+    ]
+
+    # Identifier les groupes de 1 dans le tableau de Karnaugh
+    groupes = []
+    for i in range(4):
+        for j in range(4):
+            if F[karnaugh_table[i][j]] == 1:
+                groupes.append([(i, j)])
+
+    # Fusionner les groupes adjacents
+    merged_groups = []
+    while groupes:
+        group = groupes.pop(0)
+        for other_group in groupes[:]:
+            if are_adjacent(group, other_group):
+                group.extend(other_group)
+                groupes.remove(other_group)
+        merged_groups.append(group)
+
+    # Simplifier les groupes fusionnés autant que possible
+    simplified_groups = []
+    for group in merged_groups:
+        simplified_group = simplify_group(group)
+        simplified_groups.append(simplified_group)
+
+    # Générer l'expression minimale en utilisant les groupes minimisés
+    expression_minimale = generate_minimal_expression(simplified_groups)
+
+    return expression_minimale
+
+def are_adjacent(group1, group2):
+    for cell1 in group1:
+        for cell2 in group2:
+            if abs(cell1[0] - cell2[0]) + abs(cell1[1] - cell2[1]) == 1:
+                return True
+    return False
+
+def simplify_group(group):
+    simplified_group = []
+    for cell in group:
+        simplified_group.append(chr(65 + cell[1]) + "'" * cell[0])
+    return simplified_group
+
+def generate_minimal_expression(groups):
+    expression = ""
+    for group in groups:
+        expression += "(" + " + ".join(group) + ") "
+    return expression[:-1]
+
+# Test de l'algorithme avec la fonction logique F(A, B, C) = A'B'C' + A'B'C + AB'C + ABC
+F = [1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1]
+expression_minimale = Minimisation_Karnaugh(F)
+print("Expression minimale pour F(A, B, C) =", expression_minimale)
