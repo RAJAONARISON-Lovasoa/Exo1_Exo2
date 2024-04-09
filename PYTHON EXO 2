@@ -1,0 +1,90 @@
+PTHON
+
+def F(a, b, c):
+    return (a and b and c) or (a and not b and c) or (a and b and not c)
+
+def minimisation_karnaugh():
+    # Table de Karnaugh pour les variables A, B, C
+    karnaugh_table = [
+        [F(0, 0, 0), F(0, 0, 1)],
+        [F(0, 1, 0), F(0, 1, 1)],
+        [F(1, 0, 0), F(1, 0, 1)],
+        [F(1, 1, 0), F(1, 1, 1)]
+    ]
+    
+    # Affichage de la table de Karnaugh
+    print("Table de Karnaugh pour F(A, B, C):")
+    for row in karnaugh_table:
+        print(row)
+    
+    # Identification des groupes de 1 dans la table de Karnaugh
+    groups_of_ones = []
+    visited = set()
+    
+    # Parcours de la table pour identifier les groupes de 1
+    for i in range(4):  # 4 cases dans une table de 3 variables
+        for j in range(2):
+            if karnaugh_table[i][j] == 1 and (i, j) not in visited:
+                # Nouveau groupe trouvé, explorer le groupe
+                queue = [(i, j)]
+                group = set()
+                
+                while queue:
+                    x, y = queue.pop(0)
+                    if (x, y) not in visited and karnaugh_table[x][y] == 1:
+                        visited.add((x, y))
+                        group.add((x, y))
+                        # Ajouter les voisins à explorer
+                        if (x + 1, y) not in visited and x + 1 < 4:
+                            queue.append((x + 1, y))
+                        if (x - 1, y) not in visited and x - 1 >= 0:
+                            queue.append((x - 1, y))
+                        if (x, y + 1) not in visited and y + 1 < 2:
+                            queue.append((x, y + 1))
+                        if (x, y - 1) not in visited and y - 1 >= 0:
+                            queue.append((x, y - 1))
+                
+                if group:
+                    groups_of_ones.append(group)
+    
+    # Affichage des groupes identifiés
+    print("\nGroupes de 1 dans la table de Karnaugh:")
+    for group in groups_of_ones:
+        print(group)
+    
+    # Création des termes minimisés
+    termes_minimises = []
+    for group in groups_of_ones:
+        variables_inchangees = set()
+        for (x, y) in group:
+            # Récupérer les valeurs de variables correspondant au groupe
+            if x == 0:
+                A_val = 0
+            elif x == 1:
+                A_val = 0
+            elif x == 2:
+                A_val = 1
+            elif x == 3:
+                A_val = 1
+            
+            if y == 0:
+                B_val = 0
+            elif y == 1:
+                B_val = 1
+            
+            if A_val == B_val:
+                variables_inchangees.add('C' if A_val == 1 else '¬C')
+            else:
+                variables_inchangees.add('A' if A_val == 1 else '¬A')
+                variables_inchangees.add('B' if B_val == 1 else '¬B')
+        
+        # Construire le terme minimisé
+        termes_minimises.append(" ∧ ".join(variables_inchangees))
+    
+    # Affichage des termes minimisés
+    print("\nTermes minimisés:")
+    for terme in termes_minimises:
+        print(terme)
+
+# Appel de la fonction de minimisation
+minimisation_karnaugh()
