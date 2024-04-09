@@ -1,0 +1,36 @@
+#Exo 2: Minimisation d'une fonction donné par la méthode de KARNAUGH
+
+#Posons F(A,B,C)=(A.B.C)+(A.(¬B).C)+(A.B.(¬C))
+
+ALGORITHME
+
+Fonction Karnaugh_Minimisation_F(A, B, C)
+   return (A and B and C) or (A and (¬B) and C) or (A and B and (¬C))
+    Variables:
+        tableau_karnaugh_A <- Tableau de Karnaugh pour le terme A.B.C
+        tableau_karnaugh_B <- Tableau de Karnaugh pour le terme A.(¬B).C
+        tableau_karnaugh_C <- Tableau de Karnaugh pour le terme A.B.(¬C)
+        groupes_minimaux_A <- Liste vide pour stocker les groupes minimaux de A.B.C
+        groupes_minimaux_B <- Liste vide pour stocker les groupes minimaux de A.(¬B).C
+        groupes_minimaux_C <- Liste vide pour stocker les groupes minimaux de A.B.(¬C)
+        expression_minimale <- Chaine de caractères pour stocker l'expression minimale
+
+#Construction des tableaux de Karnaugh
+    tableau_karnaugh_A <- Construction_Tableau_Karnaugh(Fonction_A.B.C)
+    tableau_karnaugh_B <- Construction_Tableau_Karnaugh(Fonction_A.(¬B).C)
+    tableau_karnaugh_C <- Construction_Tableau_Karnaugh(Fonction_A.B.(¬C))
+
+#Identification des groupes minimaux pour chaque terme
+    groupes_minimaux_A <- Minimisation_Karnaugh(tableau_karnaugh_A)
+    groupes_minimaux_B <- Minimisation_Karnaugh(tableau_karnaugh_B)
+    groupes_minimaux_C <- Minimisation_Karnaugh(tableau_karnaugh_C)
+
+#Combinaison des groupes minimaux pour obtenir l'expression minimale
+    Pour chaque groupe dans groupes_minimaux_A:
+        expression_minimale <- expression_minimale + 'A' * nombre_de_variables(groupe) + ' + '
+    Pour chaque groupe dans groupes_minimaux_B:
+        expression_minimale <- expression_minimale + '(¬B)' * nombre_de_variables(groupe) + ' + '
+    Pour chaque groupe dans groupes_minimaux_C:
+        expression_minimale <- expression_minimale + '(¬C)' * nombre_de_variables(groupe) + ' + '
+    Retourner expression_minimale
+
