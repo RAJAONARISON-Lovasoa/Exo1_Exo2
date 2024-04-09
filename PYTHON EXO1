@@ -2,7 +2,7 @@
 
 #Posons F(A,B,C)=(A.B)+((¬C)+(¬D))
 
-PYTHON
+#PYTHON
 
  #Affichage de la table de verité de la fonctionF
  
