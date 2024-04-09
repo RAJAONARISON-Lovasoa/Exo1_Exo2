@@ -2,7 +2,7 @@
 
 #Posons F(A,B,C)=(A.B.C)+(A.(¬B).C)+(A.B.(¬C))
 
-PTHON
+#PTHON
 
 def F(a, b, c):
     return (a and b and c) or (a and not b and c) or (a and b and not c)
