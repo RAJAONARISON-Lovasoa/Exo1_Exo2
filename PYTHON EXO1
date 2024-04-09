@@ -1,0 +1,23 @@
+PYTHON
+
+ #Affichage de la table de verité de la fonctionF
+ 
+# Définition de la fonction logique F
+def calcul_F(A, B, C, D):
+    return (A and B) or (not C and not D)
+
+# Affichage de la table de vérité de la fonction F
+print("A   B   C   D   F(A,B,C)")
+for A in [True, False]:
+    for B in [True, False]:
+        for C in [True, False]:
+            for D in [True, False]:
+                resultat_F = calcul_F(A, B, C, D)
+                print(A, " ", B, " ", C, " ", D, " ", resultat_F)
+
+# Affichage des formes canoniques de la fonction F
+print("\nAffichage de la première et deuxième forme canonique de la fonction F")
+print("F1 = (A AND B)")
+print("F2 = (NOT C) AND (NOT D)")
+print("Première forme canonique : F = F1 OR F2")
+print("Deuxième forme canonique : F = (A + B)(NOT C + NOT D)")
