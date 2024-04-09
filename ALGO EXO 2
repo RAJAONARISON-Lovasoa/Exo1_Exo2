@@ -2,7 +2,7 @@
 
 #Posons F(A,B,C)=(A.B.C)+(A.(¬B).C)+(A.B.(¬C))
 
-ALGORITHME
+#ALGORITHME
 
 Fonction Karnaugh_Minimisation_F(A, B, C)
    return (A and B and C) or (A and (¬B) and C) or (A and B and (¬C))
