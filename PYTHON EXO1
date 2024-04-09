@@ -1,3 +1,7 @@
+#Exo 1: Affichage de la table de verité et de la forme canonique d'une fonction logique
+
+#Posons F(A,B,C)=(A.B)+((¬C)+(¬D))
+
 PYTHON
 
  #Affichage de la table de verité de la fonctionF
