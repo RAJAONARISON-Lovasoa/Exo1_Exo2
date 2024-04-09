@@ -1,3 +1,7 @@
+#Exo 2: Minimisation d'une fonction donné par la méthode de KARNAUGH
+
+#Posons F(A,B,C)=(A.B.C)+(A.(¬B).C)+(A.B.(¬C))
+
 PTHON
 
 def F(a, b, c):
