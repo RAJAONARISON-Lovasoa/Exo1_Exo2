@@ -1,36 +1,37 @@
 #Exo 2: Minimisation d'une fonction donné par la méthode de KARNAUGH
 
-#Posons F(A,B,C)=(A.B.C)+(A.(¬B).C)+(A.B.(¬C))
-
 #ALGORITHME
+from itertools import product
 
-Fonction Karnaugh_Minimisation_F(A, B, C)
-   return (A and B and C) or (A and (¬B) and C) or (A and B and (¬C))
-    Variables:
-        tableau_karnaugh_A <- Tableau de Karnaugh pour le terme A.B.C
-        tableau_karnaugh_B <- Tableau de Karnaugh pour le terme A.(¬B).C
-        tableau_karnaugh_C <- Tableau de Karnaugh pour le terme A.B.(¬C)
-        groupes_minimaux_A <- Liste vide pour stocker les groupes minimaux de A.B.C
-        groupes_minimaux_B <- Liste vide pour stocker les groupes minimaux de A.(¬B).C
-        groupes_minimaux_C <- Liste vide pour stocker les groupes minimaux de A.B.(¬C)
-        expression_minimale <- Chaine de caractères pour stocker l'expression minimale
+def generate_truth_table(num_vars):
+    truth_table = []
+    for combo in product([0, 1], repeat=num_vars):
+        truth_table.append(list(combo))
+    return truth_table
 
-#Construction des tableaux de Karnaugh
-    tableau_karnaugh_A <- Construction_Tableau_Karnaugh(Fonction_A.B.C)
-    tableau_karnaugh_B <- Construction_Tableau_Karnaugh(Fonction_A.(¬B).C)
-    tableau_karnaugh_C <- Construction_Tableau_Karnaugh(Fonction_A.B.(¬C))
+def minimize_with_karnaugh(truth_table, num_vars):
+    groups = []
+    for row in range(len(truth_table)):
+        minterm = ""
+        for var in range(num_vars):
+            minterm += str(truth_table[row][var])
+        groups.append(minterm)
 
-#Identification des groupes minimaux pour chaque terme
-    groupes_minimaux_A <- Minimisation_Karnaugh(tableau_karnaugh_A)
-    groupes_minimaux_B <- Minimisation_Karnaugh(tableau_karnaugh_B)
-    groupes_minimaux_C <- Minimisation_Karnaugh(tableau_karnaugh_C)
+    return groups
 
-#Combinaison des groupes minimaux pour obtenir l'expression minimale
-    Pour chaque groupe dans groupes_minimaux_A:
-        expression_minimale <- expression_minimale + 'A' * nombre_de_variables(groupe) + ' + '
-    Pour chaque groupe dans groupes_minimaux_B:
-        expression_minimale <- expression_minimale + '(¬B)' * nombre_de_variables(groupe) + ' + '
-    Pour chaque groupe dans groupes_minimaux_C:
-        expression_minimale <- expression_minimale + '(¬C)' * nombre_de_variables(groupe) + ' + '
-    Retourner expression_minimale
+def main():
+    num_vars = int(input("Entrez le nombre de variables dans la fonction logique : "))
+    function = input("Entrez la fonction logique (utilisez 'not', 'and', 'or', 'xor', 'nand', 'nor', 'xnor') : ")
+
+    truth_table = generate_truth_table(num_vars)
+    print("Table de vérité :")
+    for row in truth_table:
+        print(row)
+
+    minimized_groups = minimize_with_karnaugh(truth_table, num_vars)
+    print("Groupes minimisés avec la méthode de Karnaugh :")
+    print(minimized_groups)
+
+if __name__ == "__main__":
+    main()
 
